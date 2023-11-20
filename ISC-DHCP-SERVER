@@ -1,0 +1,27 @@
+apt-get install isc-dhcp-server
+по дефолту при установке выдаст ошибки в статусе 
+у isc есть две возможности конфигурации по vlan и по порту
+Если обычная конфигурация , то выглядеть это будет так 
+nano /etc/dhcp/dhcpd.conf
+subnet 4.4.4.0 netmask 255.255.255.192 { 
+  range 4.4.4.1 4.4.4.62;      #диапозон
+  option routers 4.4.4.1;       # шлюз
+  option broadcast-address 4.4.4.63  #широковещательный адрес
+  default-lease-time 600; 
+  max-lease-time 7200'
+}
+host test1 {                                                  #привязка определенного адреса из пула по маку
+  hardware ethernet "mac add int получателя"
+  fixed-address 4.4.4.4'
+}
+
+nano /etc/default/isc-dhcp-server
+INTERFACEv4="интерфейс на котором мы хотим раздавать dhcp"
+
+nano /etc/network/interfaces
+auto ens192
+iface ens192 inet static
+address 4.4.4.1
+netmask 255.255.255.192
+
+ШЛЮЗ И АДРЕС ПОРТА ВСЕГДА ДОЛЖНЫ СОВПАДАТЬ!
